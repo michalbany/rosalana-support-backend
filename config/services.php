@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'rosalana_accounts' => [
+        'url' => env('ROSALANA_ACCOUNTS_URL'),
+        'token' => env('ROSALANA_ACCOUNTS_TOKEN'),
+    ],
+
 ];
