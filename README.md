@@ -16,5 +16,8 @@ Kromě zákaznické podpory slouží jako jednotné Admin Centrum napříč vše
 - [x] Login/Logout/Registration (Rosalana Accounts)
 - [ ] Správné zpracování Rosalana Accounts Response (frontend->server->RA->server->frontend) Odesílat stejný response jako Rosalana Accounts. Pouze odstranit informace, které nemají být zobrazeny. Nyní když uživatel registruje uživatele, který již existuje dostane zpět chybu ale s nevypovídajícími informacemi.
 - [ ] Auth::class lépe organizovaná pro znovu použitelnost (login, logout -> při chybě nebo naopak úspěchu např. při refreshi tokenu)
+- [ ] Global API Response Trait
+- [ ] Global Resource API Responses (např. UserResource JSON_API_STANDARD)
 - [ ] Admin Centrum
+- [ ] Veřejné API endpointy (nastavení CORS - veřejně povolit pouze /api/*)
 - [ ] Podpora pro Rosalana Notifications
