@@ -16,9 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
 
-        $middleware->encryptCookies(except: [
-            'RA-TOKEN',
-        ]);
+        // $middleware->encryptCookies(except: [
+        //     'RA-TOKEN',
+        // ]);
 
         $middleware->alias([
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,

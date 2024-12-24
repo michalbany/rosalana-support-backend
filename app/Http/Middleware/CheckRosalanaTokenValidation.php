@@ -23,11 +23,13 @@ class CheckRosalanaTokenValidation
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $token = $request->bearerToken();
+        // $token = $request->bearerToken();
+        
+        $token = Cookie::get('RA-TOKEN');
+        
         if (!$token) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
-
         try {
 
             JWT::decode($token, new Key(env('JWT_SECRET'), 'HS256'));

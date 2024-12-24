@@ -8,6 +8,19 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
+/*
+|--------------------------------------------------------------------------
+| Authentication routes
+|--------------------------------------------------------------------------
+|
+| Routes for authentication
+|
+*/
+
+Route::middleware(['auth', 'auth.rosalana'])->group(function () {
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+});
+
 Route::post('/register', [RegisteredUserController::class, 'store'])
     ->name('register');
 
@@ -29,7 +42,3 @@ Route::post('/login', [AuthenticatedSessionController::class, 'store'])
 // Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
 //     ->middleware(['auth', 'throttle:6,1'])
 //     ->name('verification.send');
-
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-    ->middleware('auth')
-    ->name('logout');
