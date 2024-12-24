@@ -18,4 +18,8 @@ class User extends Authenticatable
         'rosalana_account_id',
         'is_admin'
     ];
+
+    protected $casts = [
+        'is_admin' => 'boolean'
+    ];
 }

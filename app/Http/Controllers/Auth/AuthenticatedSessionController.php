@@ -44,9 +44,7 @@ class AuthenticatedSessionController extends Controller
 
         Cookie::queue(Cookie::make('RA-TOKEN', $resp['token'], 0, null, null, false, false, true));
         // // 6. Vrátím success (nebo cokoliv)
-        return response()->json([
-            'user' => $localUser,
-        ]);
+        return response()->json($localUser);
     }
 
     /**

@@ -58,8 +58,6 @@ class RegisteredUserController extends Controller
 
         event(new Registered($localUser));
 
-        return response()->json([
-            'user' => $localUser,
-        ]);
+        return response()->json($localUser);
     }
 }

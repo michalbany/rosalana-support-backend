@@ -28,10 +28,10 @@ Route::get('/', function () {
 | Routes for authenticated users
 |
 */
-Route::middleware(['auth', 'auth.rosalana'])->group(function () {
+Route::middleware(['auth.rosalana'])->group(function () {
     Route::get('/me', function (Request $request) {
         return $request->user();
     });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
