@@ -19,4 +19,4 @@ Kromě zákaznické podpory slouží jako jednotné Admin Centrum napříč vše
 - [x] Implementace základního API
 - [x] Implementace základního Admin Centra
 - [x] Implementace základního přihlašování
-- [] Implementace základního oznámení
+- [o] Implementace základního oznámení
