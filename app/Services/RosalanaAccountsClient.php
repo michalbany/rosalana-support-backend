@@ -21,7 +21,7 @@ class RosalanaAccountsClient
         // Volá rosalana-accounts /login
         $response = Http::withHeaders([
             'X-App-Token' => $this->appToken
-        ])->post("$this->baseUrl/api/login", [
+        ])->post("$this->baseUrl/api/v1/login", [
             'email' => $email,
             'password' => $password,
         ]);
@@ -34,7 +34,7 @@ class RosalanaAccountsClient
         $response = Http::withHeaders([
             'X-App-Token' => $this->appToken,
             'Authorization' => 'Bearer ' . $jwtToken,
-        ])->post("$this->baseUrl/api/logout");
+        ])->post("$this->baseUrl/api/v1/logout");
 
         return $response->json();
     }
@@ -43,7 +43,7 @@ class RosalanaAccountsClient
     {
         $response = Http::withHeaders([
             'X-App-Token' => $this->appToken
-        ])->post("$this->baseUrl/api/register", [
+        ])->post("$this->baseUrl/api/v1/register", [
             'name' => $name,
             'email' => $email,
             'password' => $password,
@@ -58,7 +58,7 @@ class RosalanaAccountsClient
         $response = Http::withHeaders([
             'X-App-Token' => $this->appToken,
             'Authorization' => 'Bearer ' . $jwtToken,
-        ])->get("$this->baseUrl/api/me");
+        ])->get("$this->baseUrl/api/v1/me");
 
         return $response->json();
     }
@@ -68,7 +68,7 @@ class RosalanaAccountsClient
         $response = Http::withHeaders([
             'X-App-Token' => $this->appToken,
             'Authorization' => 'Bearer ' . $jwtToken,
-        ])->post("$this->baseUrl/api/refresh");
+        ])->post("$this->baseUrl/api/v1/refresh");
 
         return $response->json();
     }
