@@ -29,7 +29,7 @@ Route::get('/', function () {
 |
 */
 Route::middleware(['auth', 'auth.rosalana'])->group(function () {
-    Route::get('/user', function (Request $request) {
+    Route::get('/me', function (Request $request) {
         return $request->user();
     });
 });
