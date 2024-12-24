@@ -21,7 +21,7 @@ class AuthenticatedSessionController extends Controller
         $resp = $accounts->login($request->email, $request->password);
 
         if (isset($resp['error'])) {
-            return response()->json(['message' => 'Login failed'], 401);
+            return response()->json(['message' => $resp['error']], 401);
         }
 
         // // 3. RA vrátil (user, token) => user['id'] je rosalana_account_id

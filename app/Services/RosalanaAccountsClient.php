@@ -39,6 +39,20 @@ class RosalanaAccountsClient
         return $response->json();
     }
 
+    public function register($name, $email, $password, $password_confirmation)
+    {
+        $response = Http::withHeaders([
+            'X-App-Token' => $this->appToken
+        ])->post("$this->baseUrl/api/register", [
+            'name' => $name,
+            'email' => $email,
+            'password' => $password,
+            'password_confirmation' => $password_confirmation
+        ]);
+
+        return $response->json();
+    }
+
     public function me($jwtToken)
     {
         $response = Http::withHeaders([
@@ -46,7 +60,7 @@ class RosalanaAccountsClient
             'Authorization' => 'Bearer ' . $jwtToken,
         ])->get("$this->baseUrl/me");
 
-        return $response->json(); 
+        return $response->json();
     }
 
     public function refresh(string $jwtToken)
