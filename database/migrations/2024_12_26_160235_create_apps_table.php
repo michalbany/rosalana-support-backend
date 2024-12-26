@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('apps', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('rosalana_account_id')->unique()->nullable();
+            $table->string('name')->unique();
+            $table->string('description')->nullable();
+            $table->string('icon')->nullable();
             $table->timestamps();
         });
     }

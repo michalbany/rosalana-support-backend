@@ -9,6 +9,11 @@ class MeController extends Controller
 {
     public function me(Request $request)
     {
-        return $this->ok('Logged user', $request->user()->toArray());
+        if ($request->user()) {
+            return $this->ok('Logged user', $request->user()->toArray());
+        } else {
+            return $this->error('Unauthorized', 401);
+        }
+
     }
 }

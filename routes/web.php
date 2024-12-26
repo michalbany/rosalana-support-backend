@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\v1\AppController;
 use App\Http\Controllers\v1\MeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return ['Laravel' => app()->version()];
+});
+
+
+Route::group(['prefix' => 'app'], function () {
+    Route::get('/', [AppController::class, 'index']);
+    Route::get('/{id}', [AppController::class, 'show']);
+    Route::post('/', [AppController::class, 'store']);
+    Route::delete('/{id}', [AppController::class, 'destroy']);
 });
 
 

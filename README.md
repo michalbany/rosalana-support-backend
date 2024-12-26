@@ -39,3 +39,13 @@ Když dojde k erroru tak response obsahuje buď `error` nebo `errors` pole. Poku
 - [ ] Admin Centrum
 - [ ] Veřejné API endpointy (nastavení CORS - veřejně povolit pouze /api/*)
 - [ ] Podpora pro Rosalana Notifications
+
+### Note
+
+Blueprint: a platform focused on facilitating communication between agencies and clients
+
+Rosalana: a social network focused on creativity and creative expression
+
+ProxyMa: a CMS system designed based on a single central administration
+
+S Transfer: a platform that lets you transfer files between devices

@@ -78,4 +78,58 @@ class RosalanaAccountsClient
 
         return $response;
     }
+
+    public function getAllApps()
+    {
+        $response = Http::withHeaders([
+            'X-App-Token' => $this->appToken,
+            'X-App-Origin' => $this->appOrigin
+        ])->get("$this->baseUrl/api/v1/apps");
+
+        return $response;
+    }
+
+    public function getApp($id)
+    {
+        $response = Http::withHeaders([
+            'X-App-Token' => $this->appToken,
+            'X-App-Origin' => $this->appOrigin
+        ])->get("$this->baseUrl/api/v1/apps/$id");
+
+        return $response;
+    }
+
+    public function registerApp($name)
+    {
+        $response = Http::withHeaders([
+            'X-App-Token' => $this->appToken,
+            'X-App-Origin' => $this->appOrigin
+        ])->post("$this->baseUrl/api/v1/apps", [
+            'name' => $name,
+        ]);
+
+        return $response;
+    }
+
+    public function unregisterApp($id)
+    {
+        $response = Http::withHeaders([
+            'X-App-Token' => $this->appToken,
+            'X-App-Origin' => $this->appOrigin
+        ])->delete("$this->baseUrl/api/v1/apps/$id");
+
+        return $response;
+    }
+
+    public function updateApp($id, $name)
+    {
+        $response = Http::withHeaders([
+            'X-App-Token' => $this->appToken,
+            'X-App-Origin' => $this->appOrigin
+        ])->patch("$this->baseUrl/api/v1/apps/$id", [
+            'name' => $name,
+        ]);
+
+        return $response;
+    }
 }
