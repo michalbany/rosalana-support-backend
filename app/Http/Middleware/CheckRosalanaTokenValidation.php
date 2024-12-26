@@ -20,8 +20,9 @@ class CheckRosalanaTokenValidation
     /**
      * Handle an incoming request.
      * 
-     * Kontrola tokenu z Rosalana Accounts
-     * - pokud token expiroval, zkusíme získat nový pomocí refresh tokenu
+     * #note Refresh funguje tak na pul. Prvně to vrátí error $decode undefined a potom to funguje :) user nepozná že to nefunguje
+     * Je to pravněpodobně kvůli tomu, že když JWT vyhodí při decodování exception proměnná není definovaná a já na ni potom navazuji
+     * 
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */

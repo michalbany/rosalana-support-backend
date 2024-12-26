@@ -22,11 +22,12 @@ Route::get('/', function () {
 });
 
 
-Route::group(['prefix' => 'app'], function () {
+Route::group(['prefix' => 'apps'], function () {
     Route::get('/', [AppController::class, 'index']);
     Route::get('/{id}', [AppController::class, 'show']);
     Route::post('/', [AppController::class, 'store']);
     Route::delete('/{id}', [AppController::class, 'destroy']);
+    Route::patch('/{id}', [AppController::class, 'update']);
 });
 
 

@@ -132,4 +132,14 @@ class RosalanaAccountsClient
 
         return $response;
     }
+
+    public function refreshApp($id)
+    {
+        $response = Http::withHeaders([
+            'X-App-Token' => $this->appToken,
+            'X-App-Origin' => $this->appOrigin
+        ])->post("$this->baseUrl/api/v1/apps/$id/refresh");
+
+        return $response;
+    }
 }

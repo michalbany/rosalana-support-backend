@@ -39,7 +39,7 @@ class RosalanaApps
             throw new RosalanaAuthException($response->json(), $response->status());
         }
 
-        return collect($response->json()['data']['app']);
+        return [collect($response->json()['data']['app']), $response->json()['data']['token']];
     }
 
     public static function unregister($id)
@@ -63,11 +63,18 @@ class RosalanaApps
             throw new RosalanaAuthException($response->json(), $response->status());
         }
 
-        return $response->json();
+        return collect($response->json()['data']['app']);
     }
 
-    public static function refreshToken($id)
+    public static function refresh($id)
     {
-        //
+        $ra = app(\App\Services\RosalanaAccountsClient::class);
+        $response = $ra->refreshApp($id);
+
+        if ($response->status() !== 200) {
+            throw new RosalanaAuthException($response->json(), $response->status());
+        }
+
+        return [collect($response->json()['data']['app']), $response->json()['data']['token']];
     }
 }

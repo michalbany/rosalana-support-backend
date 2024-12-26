@@ -46,7 +46,7 @@ class AppController extends Controller
         ]);
 
 
-        $rosalanaApp = RosalanaApps::register($request->name);
+        [$rosalanaApp, $appToken] = RosalanaApps::register($request->name);
 
         try {
             $app = App::sync($rosalanaApp);
@@ -65,7 +65,10 @@ class AppController extends Controller
 
         $app->applyRosalanaData();
 
-        return $this->ok('App created', $app->toArray());
+        return $this->ok('App created', [
+            'app' => $app->toArray(),
+            'token' => $appToken,
+        ]);
     }
 
     public function destroy(int $id)
@@ -77,5 +80,36 @@ class AppController extends Controller
         $app->delete();
 
         return $this->ok($response['message']);
+    }
+
+    public function update(Request $request, int $id)
+    {
+        $request->validate([
+            'name' => 'string|max:50|unique:apps',
+            'description' => 'required|string',
+            'icon' => 'string|nullable',
+        ]);
+
+        $app = App::findOrFail($id);
+
+        if ($request->has('name')) {
+            RosalanaApps::update($app->rosalana_account_id, $request->name);
+        }
+
+        $app->update($request->all());
+
+        return $this->ok('App updated', $app->toArray());
+    }
+
+    public function refreshToken(int $id)
+    {
+        $app = App::findOrFail($id);
+
+        [$app, $token] = RosalanaApps::refresh($app->rosalana_account_id);
+
+        return $this->ok('Token refreshed', [
+            'app' => $app->toArray(),
+            'token' => $token,
+        ]);
     }
 }
