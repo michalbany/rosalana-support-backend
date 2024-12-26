@@ -30,7 +30,9 @@ Route::get('/', function () {
 */
 Route::middleware(['auth.rosalana'])->group(function () {
     Route::get('/me', function (Request $request) {
-        return $request->user();
+        return response()->json([
+            'data' =>  $request->user(),
+        ]);
     });
 });
 
