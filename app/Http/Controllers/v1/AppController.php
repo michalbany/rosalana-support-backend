@@ -29,11 +29,15 @@ class AppController extends Controller
     {
         $app = App::findOrFail($id);
 
-        $rosalanaApp = RosalanaApps::find($app->rosalana_account_id);
-
-        App::sync($rosalanaApp);
+        try {
+            $rosalanaApp = RosalanaApps::find($app->rosalana_account_id);
+            App::sync($rosalanaApp);
+        } catch (\Exception $e) {
+            // nothing
+        }
+        
         $app->applyRosalanaData();
-
+        
         return $this->ok('App', $app->toArray());
     }
 
