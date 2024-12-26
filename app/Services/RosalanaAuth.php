@@ -29,7 +29,7 @@ class RosalanaAuth
     public static function logout()
     {
         $accounts = app(\App\Services\RosalanaAccountsClient::class);
-        $token = Cookie::get('RA-TOKEN');
+        $token = self::CookieGet();
         $response = $accounts->logout($token);
 
         if ($response->status() !== 200) {
@@ -49,6 +49,33 @@ class RosalanaAuth
         }
 
         return $response->json();
+    }
 
+    public static function refresh(string $token)
+    {
+        $accounts = app(\App\Services\RosalanaAccountsClient::class);
+        $response = $accounts->refresh($token);
+
+        if ($response->status() !== 200) {
+            throw new \App\Exceptions\RosalanaAuthException($response->json(), $response->status());
+        }
+
+        return $response->json();
+    }
+
+
+    public static function CookieCreate($token)
+    {
+        Cookie::queue(Cookie::make('RA-TOKEN', $token, 0, null, null, false, false, true));
+    }
+
+    public static function CookieForget()
+    {
+        Cookie::queue(Cookie::forget('RA-TOKEN'));
+    }
+
+    public static function CookieGet()
+    {
+        return Cookie::get('RA-TOKEN');
     }
 }

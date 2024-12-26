@@ -32,7 +32,7 @@ class AuthenticatedSessionController extends Controller
         );
 
         Auth::login($localUser);
-        Cookie::queue(Cookie::make('RA-TOKEN', $token, 0, null, null, false, false, true));
+        RosalanaAuth::CookieCreate($token);
 
         return $this->ok('Logged in', $localUser->toArray()); #change to $userResouce
     }
@@ -44,7 +44,7 @@ class AuthenticatedSessionController extends Controller
     {
         Auth::guard('web')->logout();        
         RosalanaAuth::logout();
-        Cookie::queue(Cookie::forget('RA-TOKEN'));
+        RosalanaAuth::CookieForget();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

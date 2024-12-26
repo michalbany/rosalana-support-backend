@@ -38,7 +38,7 @@ class RegisteredUserController extends Controller
         );
 
         Auth::login($localUser);
-        Cookie::queue(Cookie::make('RA-TOKEN', $token, 0, null, null, false, false, true));
+        RosalanaAuth::CookieCreate($token);
 
         event(new Registered($localUser));
 
