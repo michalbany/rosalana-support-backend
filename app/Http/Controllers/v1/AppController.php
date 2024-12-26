@@ -101,7 +101,7 @@ class AppController extends Controller
         return $this->ok('App updated', $app->toArray());
     }
 
-    public function refreshToken(int $id)
+    public function refresh(int $id)
     {
         $app = App::findOrFail($id);
 

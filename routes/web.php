@@ -28,6 +28,7 @@ Route::group(['prefix' => 'apps'], function () {
     Route::post('/', [AppController::class, 'store']);
     Route::delete('/{id}', [AppController::class, 'destroy']);
     Route::patch('/{id}', [AppController::class, 'update']);
+    Route::post('/{id}/refresh', [AppController::class, 'refresh']);
 });
 
 
