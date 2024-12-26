@@ -47,7 +47,7 @@ trait ApiResponses
 
     protected function rosalanaAuthFailed(RosalanaAuthException $e): JsonResponse
     {
-        return $this->error($e->getErrors()['error'] ?? $e->getErrors()['errors'], $e->getStatus());
+        return $this->error($e->getErrors()['error'] ?? $e->getErrors()['errors'] ?? $e->getErrors()['message'], $e->getStatus());
     }
 
     protected function notFound(Exception|ModelNotFoundException $e): JsonResponse

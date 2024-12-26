@@ -28,14 +28,29 @@ class RegisteredUserController extends Controller
         $user = $response['data']['user'];
         $token = $response['data']['token'];
 
-        $localUser = User::updateOrCreate(
-            ['rosalana_account_id' => $user['id']],
-            [
-                'name' => $user['name'] ?? $user['email'],
-                'email' => $user['email'],
-                'password' => Hash::make($request->password),
-            ]
-        );
+        try {
+            $localUser = User::updateOrCreate(
+                ['rosalana_account_id' => $user['id']],
+                [
+                    'name' => $user['name'] ?? $user['email'],
+                    'email' => $user['email'],
+                ]
+            );
+        } catch (\Exception $e) {
+            // #note: Toto může nastat když je nesrovnalost v databázi RA a lokální. Např. když je email in use ale v RA o něm záznam není
+            $susUser = User::where('email', $user['email'])->first();
+            if ($susUser) {
+                $susUser->update([
+                    'rosalana_account_id' => $user['id'],
+                    'name' => $user['name'] ?? $user['email'],
+                    'email' => $user['email'],
+                ]);
+
+                $localUser = $susUser;
+            } else {
+                return $this->error('Failed to Register. Error while creating local user account. Please contact support.', 500);
+            }
+        }
 
         Auth::login($localUser);
         RosalanaAuth::CookieCreate($token);
