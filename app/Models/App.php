@@ -2,11 +2,8 @@
 
 namespace App\Models;
 
-use App\Services\RosalanaApps;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
-use phpDocumentor\Reflection\Types\Void_;
 
 class App extends Model
 {
@@ -30,14 +27,16 @@ class App extends Model
                 'created_at' => $app['created_at'],
             ]);
 
-            self::$rosalanaData[$app['id']] = $app['url'] ?? '';
+            self::$rosalanaData[$app['id']]['url'] = $app['url'] ?? '';
+            self::$rosalanaData[$app['id']]['master'] = $app['master'] ?? false;
             return $model;
     }
 
     public function applyRosalanaData(): self
     {
         $this->setAttribute('active', isset(self::$rosalanaData[$this->rosalana_account_id]));
-        $this->setAttribute('url', self::$rosalanaData[$this->rosalana_account_id] ?? null);
+        $this->setAttribute('url', self::$rosalanaData[$this->rosalana_account_id]['url'] ?? null);
+        $this->setAttribute('master', self::$rosalanaData[$this->rosalana_account_id]['master'] ?? null);
 
         return $this;
     }
