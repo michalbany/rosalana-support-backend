@@ -22,4 +22,8 @@ class User extends Authenticatable
     protected $casts = [
         'is_admin' => 'boolean'
     ];
+
+    protected $hidden = [
+        'rosalana_account_id',
+    ];
 }

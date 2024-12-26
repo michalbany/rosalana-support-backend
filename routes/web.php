@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\v1\MeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,11 +30,7 @@ Route::get('/', function () {
 |
 */
 Route::middleware(['auth.rosalana'])->group(function () {
-    Route::get('/me', function (Request $request) {
-        return response()->json([
-            'data' =>  $request->user(),
-        ]);
-    });
+    Route::get('/me', [MeController::class, 'me']);
 });
 
 require __DIR__ . '/auth.php';
