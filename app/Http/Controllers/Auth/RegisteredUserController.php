@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\RosalanaAuth;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -21,43 +22,26 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+        // #removed Validation is on Rosalana Accounts
+        $response = RosalanaAuth::register($request->name, $request->email, $request->password, $request->password_confirmation);
 
-        $accounts = app(\App\Services\RosalanaAccountsClient::class);
-        $resp = $accounts->register($request->name, $request->email, $request->password, $request->password_confirmation);
+        $user = $response['data']['user'];
+        $token = $response['data']['token'];
 
-        if (isset($resp['error'])) {
-            return response()->json(['message' => $resp['error']], 401);
-        }
-
-        // // 3. RA vrátil (user, token) => user['id'] je rosalana_account_id
-        $raUserId = $resp['user']['id'] ?? null;
-        if (!$raUserId) {
-            return response()->json(['message' => 'No user ID from RA'], 500);
-        }
-
-        // // 4. Najdu / vytvořím local user
         $localUser = User::updateOrCreate(
-            ['rosalana_account_id' => $raUserId],
+            ['rosalana_account_id' => $user['id']],
             [
-                'name' => $resp['user']['name'] ?? $resp['user']['email'],
-                'email' => $resp['user']['email'],
+                'name' => $user['name'] ?? $user['email'],
+                'email' => $user['email'],
                 'password' => Hash::make($request->password),
             ]
         );
 
-        // // 5. Lokální login (session)
         Auth::login($localUser);
-
-        Cookie::queue(Cookie::make('RA-TOKEN', $resp['token'], 0, null, null, false, false, true));
-
+        Cookie::queue(Cookie::make('RA-TOKEN', $token, 0, null, null, false, false, true));
 
         event(new Registered($localUser));
 
-        return response()->json($localUser);
+        return $this->ok('Registered', $localUser->toArray()); #change to $userResouce
     }
 }

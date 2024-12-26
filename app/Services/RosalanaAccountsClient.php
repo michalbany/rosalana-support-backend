@@ -18,7 +18,6 @@ class RosalanaAccountsClient
 
     public function login($email, $password)
     {
-        // Volá rosalana-accounts /login
         $response = Http::withHeaders([
             'X-App-Token' => $this->appToken
         ])->post("$this->baseUrl/api/v1/login", [
@@ -26,7 +25,7 @@ class RosalanaAccountsClient
             'password' => $password,
         ]);
 
-        return $response->json();
+        return $response;
     }
 
     public function logout($jwtToken)
@@ -36,7 +35,7 @@ class RosalanaAccountsClient
             'Authorization' => 'Bearer ' . $jwtToken,
         ])->post("$this->baseUrl/api/v1/logout");
 
-        return $response->json();
+        return $response;
     }
 
     public function register($name, $email, $password, $password_confirmation)
@@ -50,7 +49,7 @@ class RosalanaAccountsClient
             'password_confirmation' => $password_confirmation
         ]);
 
-        return $response->json();
+        return $response;
     }
 
     public function me($jwtToken)
@@ -60,7 +59,7 @@ class RosalanaAccountsClient
             'Authorization' => 'Bearer ' . $jwtToken,
         ])->get("$this->baseUrl/api/v1/me");
 
-        return $response->json();
+        return $response;
     }
 
     public function refresh(string $jwtToken)
@@ -70,6 +69,6 @@ class RosalanaAccountsClient
             'Authorization' => 'Bearer ' . $jwtToken,
         ])->post("$this->baseUrl/api/v1/refresh");
 
-        return $response->json();
+        return $response;
     }
 }
