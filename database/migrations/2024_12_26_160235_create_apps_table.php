@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('rosalana_account_id')->unique()->nullable();
             $table->string('name')->unique();
             $table->string('description')->nullable();
-            $table->string('icon')->nullable();
+            $table->string('icon')->default('lucide:shield-question');
             $table->timestamps();
         });
     }
