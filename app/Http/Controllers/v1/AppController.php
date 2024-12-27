@@ -87,6 +87,35 @@ class AppController extends Controller
         return $this->ok($response['message']);
     }
 
+    public function disable(int $id)
+    {
+        $app = App::findOrFail($id);
+
+        $rosalanaApp = RosalanaApps::unregister($app->rosalana_account_id);
+
+        $app->update(['rosalana_account_id' => null]);
+
+        $app->applyRosalanaData();
+
+        return $this->ok('App disabled', $app->toArray());
+    }
+
+    public function enable(int $id)
+    {
+        $app = App::findOrFail($id);
+
+        [$rosalanaApp, $token] = RosalanaApps::register($app->name);
+
+        App::sync($rosalanaApp);
+
+        $app->applyRosalanaData();
+
+        return $this->ok('App enabled', [
+            'app' => $app->toArray(),
+            'token' => $token,
+        ]);
+    }
+
     public function update(Request $request, int $id)
     {
         $request->validate([
