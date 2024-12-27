@@ -44,7 +44,6 @@ class CheckRosalanaTokenValidation
                 RosalanaAuth::CookieCreate($token);
                 $decode = JWT::decode($token, new Key(env('JWT_SECRET'), 'HS256'));
                 $this->logginUser($decode);
-                logger('Token refreshed'); // #temp
             } catch (\App\Exceptions\RosalanaAuthException $e) {
                 $this->logoutUser();
                 return $this->unauthorized(new \Exception('Unauthorized'));
