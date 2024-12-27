@@ -10,6 +10,8 @@ class App extends Model
     protected $fillable = [
         'rosalana_account_id',
         'name',
+        'description',
+        'icon',
         'created_at',
         'updated_at',
     ];

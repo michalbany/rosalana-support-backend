@@ -35,16 +35,16 @@ class AppController extends Controller
         } catch (\Exception $e) {
             // nothing
         }
-        
+
         $app->applyRosalanaData();
-        
+
         return $this->ok('App', $app->toArray());
     }
 
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'name' => 'required|string|max:50',
+            'name' => 'required|string|max:50|unique:apps',
             'description' => 'required|string',
             'icon' => 'string|nullable',
         ]);
@@ -58,14 +58,15 @@ class AppController extends Controller
             // #note: Toto může nastat když je nesrovnalost v databázi RA a lokální. Např. když je email in use ale v RA o něm záznam není
             $appExists = App::where('name', $request->name)->first();
             if ($appExists) {
-                $appExists->update([
-                    'rosalana_account_id' => $rosalanaApp['id'],
-                    'description' => $request->description,
-                    'icon' => $request->icon,
-                ]);
+                $appExists->rosalana_account_id = $rosalanaApp['id'];
                 $app = $appExists;
             }
         }
+
+        $app->update([
+            'description' => $request->description,
+            'icon' => $request->icon,
+        ]);
 
         $app->applyRosalanaData();
 
