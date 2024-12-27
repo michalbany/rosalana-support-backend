@@ -56,7 +56,6 @@ class CheckRosalanaTokenValidation
 
     private function logoutUser()
     {
-        logger('HIT LOGOUT'); // #temp
         Auth::logout();
         RosalanaAuth::CookieForget();
 
@@ -66,7 +65,6 @@ class CheckRosalanaTokenValidation
 
     private function logginUser($decode)
     {
-        logger('HIT LOGIN'); // #temp
         $user = User::where('rosalana_account_id', $decode->sub)->first();
         Auth::login($user);
 
