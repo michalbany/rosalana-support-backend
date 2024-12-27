@@ -36,11 +36,13 @@ class CheckRosalanaTokenValidation
 
         try {
             $decode = JWT::decode($token, new Key(env('JWT_SECRET'), 'HS256'));
+            $this->logginUser($decode);
         } catch (ExpiredException $e) {
             try {
                 $response = RosalanaAuth::refresh($token);
                 $token = $response['data']['token'];
                 RosalanaAuth::CookieCreate($token);
+                $decode = JWT::decode($token, new Key(env('JWT_SECRET'), 'HS256'));
                 $this->logginUser($decode);
                 logger('Token refreshed'); // #temp
             } catch (\App\Exceptions\RosalanaAuthException $e) {
@@ -67,5 +69,7 @@ class CheckRosalanaTokenValidation
         logger('HIT LOGIN'); // #temp
         $user = User::where('rosalana_account_id', $decode->sub)->first();
         Auth::login($user);
+
+        session()->regenerate();
     }
 }
