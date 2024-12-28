@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\v1\UserResource;
 use App\Models\User;
 use App\Services\RosalanaAuth;
 use Illuminate\Auth\Events\Registered;
@@ -57,6 +58,6 @@ class RegisteredUserController extends Controller
 
         event(new Registered($localUser));
 
-        return $this->ok('Registered', $localUser->toArray()); #change to $userResouce
+        return $this->ok('Registered', UserResource::make($localUser));
     }
 }

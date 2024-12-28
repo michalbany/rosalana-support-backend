@@ -14,9 +14,7 @@ class UserResource extends ApiResource
      */
     public function attributes($request)
     {
-        return [
-            // Define attributes...
-        ];
+        return parent::attributes($request);
     }
 
     /**

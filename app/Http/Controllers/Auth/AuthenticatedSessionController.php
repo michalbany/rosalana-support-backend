@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Resources\v1\UserResource;
 use App\Models\User;
 use App\Services\RosalanaAuth;
 use Illuminate\Http\JsonResponse;
@@ -49,7 +50,7 @@ class AuthenticatedSessionController extends Controller
         Auth::login($localUser);
         RosalanaAuth::CookieCreate($token);
 
-        return $this->ok('Logged in', $localUser->toArray()); #change to $userResouce
+        return $this->ok('Logged in', UserResource::make($localUser));
     }
 
     /**
