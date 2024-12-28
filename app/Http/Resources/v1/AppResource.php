@@ -3,6 +3,7 @@
 namespace App\Http\Resources\v1;
 
 use App\Http\Resources\v1\ApiResource;
+use App\Http\Resources\V1\DocResource;
 
 class AppResource extends ApiResource
 {
@@ -26,7 +27,10 @@ class AppResource extends ApiResource
     public function relationships($request)
     {
         return [
-            // Define relationships...
+            $this->mergeWhen($request->routeIs('apps.*'), [
+                'docs' => DocResource::collection($this->docs),
+                'issues' => IssueResource::collection($this->issues),
+            ]),
         ];
     }
 

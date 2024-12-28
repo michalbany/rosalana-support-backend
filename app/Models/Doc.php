@@ -13,7 +13,7 @@ class Doc extends Model
         'user_id',
         'title',
         'content',
-        'is_published',
+        'status',
         'published_at',
     ];
 
@@ -45,14 +45,12 @@ class Doc extends Model
     {
         $this->status = 'published';
         $this->published_at = now();
-        $this->save();
     }
 
     public function draft()
     {
         $this->status = 'draft';
         $this->published_at = null;
-        $this->save();
     }
 
     public function scopeFilter(Builder $builder, ApiFilter $filters): Builder

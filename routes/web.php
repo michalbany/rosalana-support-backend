@@ -24,19 +24,22 @@ Route::get('/', function () {
 
 
 Route::group(['prefix' => 'apps'], function () {
-    Route::get('/', [AppController::class, 'index']);
-    Route::get('/{id}', [AppController::class, 'show']);
-    Route::post('/', [AppController::class, 'store']);
-    Route::delete('/{id}', [AppController::class, 'destroy']);
-    Route::post('/{id}/disable', [AppController::class, 'disable']);
-    Route::post('/{id}/enable', [AppController::class, 'enable']);
-    Route::patch('/{id}', [AppController::class, 'update']);
-    Route::post('/{id}/refresh', [AppController::class, 'refresh']);
+    Route::get('/', [AppController::class, 'index'])->name('apps.index');
+    Route::get('/{id}', [AppController::class, 'show'])->name('apps.show');
+    Route::post('/', [AppController::class, 'store'])->name('apps.store');
+    Route::delete('/{id}', [AppController::class, 'destroy'])->name('apps.destroy');
+    Route::post('/{id}/disable', [AppController::class, 'disable'])->name('apps.disable');
+    Route::post('/{id}/enable', [AppController::class, 'enable'])->name('apps.enable');
+    Route::patch('/{id}', [AppController::class, 'update'])->name('apps.update');
+    Route::post('/{id}/refresh', [AppController::class, 'refresh'])->name('apps.refresh');
 });
 
 Route::group(['prefix' => 'docs'], function () {
     Route::get('/', [DocController::class, 'index'])->name('docs.index');
     Route::get('/{id}', [DocController::class, 'show'])->name('docs.show');
+    Route::post('/', [DocController::class, 'store'])->name('docs.store');
+    Route::patch('/{id}', [DocController::class, 'update'])->name('docs.update');
+    Route::delete('/{id}', [DocController::class, 'destroy'])->name('docs.destroy');
 });
 
 

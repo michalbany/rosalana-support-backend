@@ -24,14 +24,49 @@ class DocController extends Controller
 
     public function store(Request $request)
     {
-        $doc = Doc::create($request->all());
+        $request->validate([
+            'title' => 'required|string|max:50',
+            'content' => 'required|string',
+            'app_id' => 'required|integer|exists:apps,id',
+            'user_id' => 'required|integer|exists:users,id',
+        ]);
 
-        return $this->created('Doc created successfully', DocResource::make($doc));
+        if (!$request->user()->is_admin) {
+            return $this->unauthorized(new \Exception('You are not authorized to perform this action'));
+        }
+
+        $doc = Doc::create([
+            'title' => $request->title,
+            'content' => $request->content,
+            'app_id' => $request->app_id,
+            'user_id' => $request->user_id,
+            'status' => 'draft',
+        ]);
+
+        return $this->ok('Doc created successfully', DocResource::make($doc));
     }
 
     public function update(Request $request, int $id)
     {
+        $request->validate([
+            'title' => 'string|max:50',
+            'content' => 'string',
+            'app_id' => 'integer|exists:apps,id',
+            'user_id' => 'integer|exists:users,id',
+            'status' => 'string|in:draft,published',
+        ]);
+
         $doc = Doc::findOrFail($id);
+
+        if (!$request->user()->is_admin && $doc->user_id !== $request->user()->id) {
+            return $this->unauthorized(new \Exception('You are not authorized to perform this action'));
+        }
+
+        if ($request->status === 'published') {
+            $doc->publish();
+        } elseif ($request->status === 'draft') {
+            $doc->draft();
+        }
 
         $doc->update($request->all());
 
