@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Http\Filters\ApiFilter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
@@ -51,5 +53,10 @@ class App extends Model
     public function docs()
     {
         return $this->hasMany(Doc::class);
+    }
+
+    public function scopeFilter(Builder $builder, ApiFilter $filters): Builder
+    {
+        return $filters->apply($builder);
     }
 }

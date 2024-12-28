@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Http\Filters\ApiFilter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class ThreadContribution extends Model
@@ -58,5 +60,10 @@ class ThreadContribution extends Model
     public function scopeSolutions($query)
     {
         return $query->where('type', 'solution');
+    }
+
+    public function scopeFilter(Builder $builder, ApiFilter $filters): Builder
+    {
+        return $filters->apply($builder);
     }
 }

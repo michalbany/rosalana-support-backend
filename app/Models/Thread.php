@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Http\Filters\ApiFilter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
@@ -71,5 +73,9 @@ class Thread extends Model
         $this->save();
     }
 
+    public function scopeFilter(Builder $builder, ApiFilter $filters): Builder
+    {
+        return $filters->apply($builder);
+    }
 
 }

@@ -30,6 +30,8 @@ abstract class Controller extends \Illuminate\Routing\Controller
             return $this->validationFailed($e);
         } catch (\App\Exceptions\RosalanaAuthException $e) {
             return $this->rosalanaAuthFailed($e);
+        } catch (\App\Exceptions\ApiFilterHelpException $e) {
+            return response()->json($e->getData());
         } catch (\Exception $e) {
             return $this->serverError($e);
         }

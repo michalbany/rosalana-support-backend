@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Http\Filters\ApiFilter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Doc extends Model
@@ -51,5 +53,10 @@ class Doc extends Model
         $this->status = 'draft';
         $this->published_at = null;
         $this->save();
+    }
+
+    public function scopeFilter(Builder $builder, ApiFilter $filters): Builder
+    {
+        return $filters->apply($builder);
     }
 }

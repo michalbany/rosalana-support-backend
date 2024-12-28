@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Http\Filters\ApiFilter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Issue extends Model
@@ -68,5 +70,10 @@ class Issue extends Model
     {
         $this->visibility = 'public';
         $this->save();
+    }
+
+    public function scopeFilter(Builder $builder, ApiFilter $filters): Builder
+    {
+        return $filters->apply($builder);
     }
 }
