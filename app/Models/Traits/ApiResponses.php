@@ -3,6 +3,8 @@
 namespace App\Models\Traits;
 
 use App\Exceptions\RosalanaAuthException;
+use App\Http\Resources\v1\ApiCollection;
+use App\Http\Resources\v1\ApiResource;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -13,7 +15,7 @@ trait ApiResponses
     /**
      * @param array<string,mixed> $data
      */
-    protected function ok(string $message, array $data = []): JsonResponse
+    protected function ok(string $message, array|ApiCollection|ApiResource $data = []): JsonResponse
     {
         return $this->success($message, $data, 200);
     }
@@ -21,7 +23,7 @@ trait ApiResponses
     /**
      * @param array<string,mixed> $data
      */
-    protected function success(string $message, array $data = [], int $statusCode = 200): JsonResponse
+    protected function success(string $message, array|ApiCollection|ApiResource $data = [], int $statusCode = 200): JsonResponse
     {
         return response()->json([
             'message' => $message,
