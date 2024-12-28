@@ -46,7 +46,7 @@ class AppController extends Controller
         $request->validate([
             'name' => 'required|string|max:50|unique:apps',
             'description' => 'required|string',
-            'icon' => 'string|nullable',
+            'icon' => 'string',
         ]);
 
 
@@ -80,18 +80,28 @@ class AppController extends Controller
     {
         $app = App::findOrFail($id);
 
-        $response = RosalanaApps::unregister($app->rosalana_account_id);
+        $appExists = false;
+        try {
+            RosalanaApps::find($app->rosalana_account_id);
+            $appExists = true;
+        } catch (\Exception $e) {
+            $appExists = false;
+        }
+
+        if ($appExists) {
+            RosalanaApps::unregister($app->rosalana_account_id);
+        }
 
         $app->delete();
 
-        return $this->ok($response['message']);
+        return $this->ok('App has been deleted');
     }
 
     public function disable(int $id)
     {
         $app = App::findOrFail($id);
 
-        $rosalanaApp = RosalanaApps::unregister($app->rosalana_account_id);
+        RosalanaApps::unregister($app->rosalana_account_id);
 
         $app->update(['rosalana_account_id' => null]);
 
@@ -106,6 +116,8 @@ class AppController extends Controller
 
         [$rosalanaApp, $token] = RosalanaApps::register($app->name);
 
+        $app->update(['rosalana_account_id' => $rosalanaApp['id']]);
+
         App::sync($rosalanaApp);
 
         $app->applyRosalanaData();
@@ -119,15 +131,25 @@ class AppController extends Controller
     public function update(Request $request, int $id)
     {
         $request->validate([
-            'name' => 'string|max:50|unique:apps',
+            'name' => 'string|max:50',
             'description' => 'required|string',
             'icon' => 'string|nullable',
         ]);
 
         $app = App::findOrFail($id);
 
-        if ($request->has('name')) {
-            RosalanaApps::update($app->rosalana_account_id, $request->name);
+        if ($request->has('name') && $app->name !== $request->name) {
+            $appExists = false;
+            try {
+                RosalanaApps::find($app->rosalana_account_id);
+                $appExists = true;
+            } catch (\Exception $e) {
+                $appExists = false;
+            }
+
+            if ($appExists) {
+                RosalanaApps::update($app->rosalana_account_id, $request->name);
+            }
         }
 
         $app->update($request->all());

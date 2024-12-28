@@ -27,7 +27,7 @@ Route::group(['prefix' => 'apps'], function () {
     Route::get('/{id}', [AppController::class, 'show']);
     Route::post('/', [AppController::class, 'store']);
     Route::delete('/{id}', [AppController::class, 'destroy']);
-    Route::delete('/{id}/disable', [AppController::class, 'disable']);
+    Route::post('/{id}/disable', [AppController::class, 'disable']);
     Route::post('/{id}/enable', [AppController::class, 'enable']);
     Route::patch('/{id}', [AppController::class, 'update']);
     Route::post('/{id}/refresh', [AppController::class, 'refresh']);
