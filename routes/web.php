@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\v1\AppController;
+use App\Http\Controllers\v1\DocController;
 use App\Http\Controllers\v1\MeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,11 @@ Route::group(['prefix' => 'apps'], function () {
     Route::post('/{id}/enable', [AppController::class, 'enable']);
     Route::patch('/{id}', [AppController::class, 'update']);
     Route::post('/{id}/refresh', [AppController::class, 'refresh']);
+});
+
+Route::group(['prefix' => 'docs'], function () {
+    Route::get('/', [DocController::class, 'index'])->name('docs.index');
+    Route::get('/{id}', [DocController::class, 'show'])->name('docs.show');
 });
 
 
