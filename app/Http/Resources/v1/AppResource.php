@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\v1;
 
+use App\Http\Processors\API\V1\ApiRequest;
 use App\Http\Resources\v1\ApiResource;
 use App\Http\Resources\V1\DocResource;
 

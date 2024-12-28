@@ -18,7 +18,27 @@ class App extends Model
         'updated_at',
     ];
 
+    protected $appends = [
+        'warnings',
+    ];
+
     protected static array $rosalanaData = [];
+
+    public function getWarningsAttribute(): array
+    {
+        $warnings = [];
+
+        if (!$this->docs()->where('status', 'published')->exists()) {
+            $warnings[] = "App $this->name still doesn't have any public docs. Please add some.";
+        }
+
+        if ($this->issues()->where('status', 'open')->exists()) {
+            $count = $this->issues()->where('status', 'open')->count();
+            $warnings[] = "App $this->name has open $count issues. Please resolve them.";
+        }
+
+        return $warnings;
+    }
 
     public static function sync(Collection $app): App
     {
