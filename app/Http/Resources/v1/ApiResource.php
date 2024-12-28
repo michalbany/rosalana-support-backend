@@ -15,6 +15,11 @@ class ApiResource extends JsonResource
     /** @var array<mixed>|callable */
     protected $currentFilterData = null;
 
+    protected $additionalAttributes = [];
+    protected $additionalRelationships = [];
+    protected $additionalLinks = [];
+
+
     /**
      * Create a new resource instance.
      *
@@ -39,9 +44,9 @@ class ApiResource extends JsonResource
         return [
             'type' => $this->modelType($request),
             'id' => $this->resource->id ?? $this->resource['id'] ?? null,
-            'attributes' => $this->attributes($request),
-            'relationships' => $this->relationships($request),
-            'links' => $this->links($request),
+            'attributes' => array_merge($this->attributes($request), $this->additionalAttributes),
+            'relationships' => array_merge($this->relationships($request), $this->additionalRelationships),
+            'links' => array_merge($this->links($request), $this->additionalLinks),
         ];
     }
 
@@ -115,6 +120,20 @@ class ApiResource extends JsonResource
     }
 
     /**
+     * Add attributes data by chaining.
+     */
+    public function addAttributes(array|callable $data): self
+    {
+        if (is_callable($data)) {
+            $data = call_user_func($data, $this->resource);
+        }
+
+        $this->additionalAttributes = array_merge($this->additionalAttributes, $data);
+
+        return $this;
+    }
+
+    /**
      * Set the relationships data by chaining.
      * 
      * @param array<mixed>|callable $data
@@ -128,6 +147,20 @@ class ApiResource extends JsonResource
     }
 
     /**
+     * Add relationships data by chaining.
+     */
+    public function addRelationships(array|callable $data): self
+    {
+        if (is_callable($data)) {
+            $data = call_user_func($data, $this->resource);
+        }
+
+        $this->additionalRelationships = array_merge($this->additionalRelationships, $data);
+
+        return $this;
+    }
+
+    /**
      * Set the links data by chaining.
      * 
      * @param array<mixed>|callable $data
@@ -136,6 +169,20 @@ class ApiResource extends JsonResource
     public function setLinks(array|callable $data): self
     {
         $this->linksData = $data;
+
+        return $this;
+    }
+
+    /**
+     * Add links data by chaining.
+     */
+    public function addLinks(array|callable $data): self
+    {
+        if (is_callable($data)) {
+            $data = call_user_func($data, $this->resource);
+        }
+
+        $this->additionalLinks = array_merge($this->additionalLinks, $data);
 
         return $this;
     }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Filters\AppFilter;
+use App\Http\Resources\v1\AppResource;
 use App\Models\App;
 use App\Services\RosalanaApps;
 use Illuminate\Http\JsonResponse;
@@ -10,18 +12,27 @@ use Illuminate\Http\Request;
 
 class AppController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(AppFilter $filters): JsonResponse
     {
+        $filter = request()->get('filter', []);
+
         $rosalanaApps = RosalanaApps::all();
 
         $rosalanaApps->each(function ($rosalanaApp) {
             App::sync(collect($rosalanaApp));
         });
 
-        $apps = App::all();
+        $apps = App::filter($filters)->get();
         $apps->each(fn($app) => $app->applyRosalanaData());
 
-        return $this->ok('Apps', $apps->toArray());
+        if (array_key_exists('active', $filter)) {
+            // filter only active apps
+            $apps = $apps->filter(function ($app) {
+                return $app->active == true;
+            });
+        }
+
+        return $this->ok('Apps', AppResource::collection($apps));
     }
 
 
@@ -38,7 +49,7 @@ class AppController extends Controller
 
         $app->applyRosalanaData();
 
-        return $this->ok('App', $app->toArray());
+        return $this->ok('App', AppResource::make($app));
     }
 
     public function store(Request $request): JsonResponse
@@ -70,10 +81,9 @@ class AppController extends Controller
 
         $app->applyRosalanaData();
 
-        return $this->ok('App created', [
-            'app' => $app->toArray(),
+        return $this->ok('App created', AppResource::make($app)->addAttributes([
             'token' => $appToken,
-        ]);
+        ]));
     }
 
     public function destroy(int $id)
@@ -107,7 +117,7 @@ class AppController extends Controller
 
         $app->applyRosalanaData();
 
-        return $this->ok('App disabled', $app->toArray());
+        return $this->ok('App disabled', AppResource::make($app));
     }
 
     public function enable(int $id)
@@ -122,10 +132,9 @@ class AppController extends Controller
 
         $app->applyRosalanaData();
 
-        return $this->ok('App enabled', [
-            'app' => $app->toArray(),
+        return $this->ok('App enabled', AppResource::make($app)->addAttributes([
             'token' => $token,
-        ]);
+        ]));
     }
 
     public function update(Request $request, int $id)
@@ -154,18 +163,20 @@ class AppController extends Controller
 
         $app->update($request->all());
 
-        return $this->ok('App updated', $app->toArray());
+        return $this->ok('App updated', AppResource::make($app));
     }
 
     public function refresh(int $id)
     {
         $app = App::findOrFail($id);
 
-        [$app, $token] = RosalanaApps::refresh($app->rosalana_account_id);
+        [$rosalanaApp, $token] = RosalanaApps::refresh($app->rosalana_account_id);
 
-        return $this->ok('Token refreshed', [
-            'app' => $app->toArray(),
+        App::sync($rosalanaApp);
+        $app->applyRosalanaData();
+
+        return $this->ok('Token refreshed', AppResource::make($app)->addAttributes([
             'token' => $token,
-        ]);
+        ]));
     }
 }
