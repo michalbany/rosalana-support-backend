@@ -26,4 +26,19 @@ class User extends Authenticatable
     protected $hidden = [
         'rosalana_account_id',
     ];
+
+    public function issues()
+    {
+        return $this->hasMany(Issue::class);
+    }
+
+    public function docs()
+    {
+        return $this->hasMany(Doc::class);
+    }
+
+    public function threads()
+    {
+        return $this->hasMany(Thread::class);
+    }
 }

@@ -43,8 +43,13 @@ class App extends Model
         return $this;
     }
 
+    public function issues()
+    {
+        return $this->hasMany(Issue::class);
+    }
 
-    // public function docs(): HasMany
-
-    // public function supportAsks... hasmamy
+    public function docs()
+    {
+        return $this->hasMany(Doc::class);
+    }
 }
