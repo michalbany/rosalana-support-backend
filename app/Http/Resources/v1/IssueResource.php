@@ -31,6 +31,19 @@ class IssueResource extends ApiResource
                 'app' => AppResource::make($this->app),
                 'thread' => ThreadResource::make($this->thread),
             ]),
+            $this->mergeWhen(!$request->routeIs('issues.*'), [
+                'app' => ApiResource::make($this->app)->setAttributes(function ($app) {
+                    return [
+                        'name' => $app->name,
+                    ];
+                }),
+                'author' => ApiResource::make($this->user)->setAttributes(function ($user) {
+                    return [
+                        'name' => $user->name,
+                    ];
+                }),
+                'thread' => $this->threads->count()
+            ]),
         ];
     }
 
