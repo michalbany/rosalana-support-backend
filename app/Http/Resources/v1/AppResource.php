@@ -34,7 +34,9 @@ class AppResource extends ApiResource
 
         $issues = $this->issues;
         if (!$request->user()?->is_admin) {
-            $issues = $this->issues->where('visibility', 'public')->where('user_id', $request->user()?->id);
+            $issues = $this->issues->filter(function ($issue) use ($request) {
+                return $issue->visibility === 'public' || $issue->user_id === $request->user()?->id;
+            });
         }
 
 
