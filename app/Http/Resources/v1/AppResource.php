@@ -27,10 +27,21 @@ class AppResource extends ApiResource
      */
     public function relationships($request)
     {
+        $docs = $this->docs;
+        if (!$request->user()?->is_admin) {
+            $docs = $this->docs->where('status', 'published');
+        }
+
+        $issues = $this->issues;
+        if (!$request->user()?->is_admin) {
+            $issues = $this->issues->where('visibility', 'public')->where('user_id', $request->user()?->id);
+        }
+
+
         return [
             $this->mergeWhen($request->routeIs('apps.*'), [
-                'docs' => DocResource::collection($this->docs),
-                'issues' => IssueResource::collection($this->issues),
+                'docs' => DocResource::collection($docs),
+                'issues' => IssueResource::collection($issues),
             ]),
         ];
     }

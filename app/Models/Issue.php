@@ -45,31 +45,26 @@ class Issue extends Model
     public function close()
     {
         $this->status = 'closed';
-        $this->save();
     }
 
     public function open()
     {
         $this->status = 'open';
-        $this->save();
     }
 
     public function solve()
     {
         $this->status = 'solved';
-        $this->save();
     }
 
     public function private()
     {
         $this->visibility = 'private';
-        $this->save();
     }
 
     public function public()
     {
         $this->visibility = 'public';
-        $this->save();
     }
 
     public function scopeFilter(Builder $builder, ApiFilter $filters): Builder

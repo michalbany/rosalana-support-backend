@@ -26,7 +26,11 @@ class IssueResource extends ApiResource
     public function relationships($request)
     {
         return [
-            // Define relationships...
+            $this->mergeWhen($request->routeIs('issues.*'), [
+                'author' => UserResource::make($this->user),
+                'app' => AppResource::make($this->app),
+                'thread' => ThreadResource::make($this->thread),
+            ]),
         ];
     }
 

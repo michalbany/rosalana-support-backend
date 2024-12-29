@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\v1\AppController;
 use App\Http\Controllers\v1\DocController;
+use App\Http\Controllers\v1\IssueController;
 use App\Http\Controllers\v1\MeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +41,14 @@ Route::group(['prefix' => 'docs'], function () {
     Route::post('/', [DocController::class, 'store'])->name('docs.store');
     Route::patch('/{id}', [DocController::class, 'update'])->name('docs.update');
     Route::delete('/{id}', [DocController::class, 'destroy'])->name('docs.destroy');
+});
+
+Route::group(['prefix' => 'issues'], function () {
+    Route::get('/', [IssueController::class, 'index'])->name('issues.index');
+    Route::get('/{id}', [IssueController::class, 'show'])->name('issues.show');
+    Route::post('/', [IssueController::class, 'store'])->name('issues.store');
+    Route::patch('/{id}', [IssueController::class, 'update'])->name('issues.update');
+    Route::delete('/{id}', [IssueController::class, 'destroy'])->name('issues.destroy');
 });
 
 
