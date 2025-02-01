@@ -2,6 +2,8 @@
 
 ![Static Badge](https://img.shields.io/badge/ROSALANA-blue?style=for-the-badge)
 
+try
+
 **Rosalana Support** představuje místo pro získání podpory a pomoci s produkty v ekosystému Rosalana. Uživatel si může vybrat s kterým produktem má problém a následně se mu zobrazí nápověda a možnost kontaktovat podporu. 
 
 Posílání zpráv a dalších oznámení je zajištěno pomocí **Rosalana Notifications** modulu, jakožto jednotného modulu pro oznámení v ekosystému.
